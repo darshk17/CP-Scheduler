@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+
 /* ===========================
    CP Scheduler — style.css
    Global styles, theme, layout
@@ -39,6 +41,7 @@
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
   --font-mono: 'Space Mono', monospace;
   --font-display: 'Syne', sans-serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --transition: 0.2s ease;
 }
 
@@ -72,7 +75,7 @@ html {
 }
 
 body {
-  font-family: var(--font-display);
+  font-family: var(--font-ui);
   background: var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
@@ -515,4 +518,59 @@ footer p {
   color: var(--accent-bright) !important;
   border-left: 2px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ===========================
+   SaaS Dashboard Layout
+   =========================== */
+.dashboard-grid-top {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.dashboard-card-profile {
+  grid-column: span 3;
+}
+
+.dashboard-card-leetcode {
+  grid-column: span 5;
+}
+
+.dashboard-card-codeforces {
+  grid-column: span 4;
+}
+
+.dashboard-grid-settings {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-card-profile {
+    grid-column: span 4;
+  }
+  .dashboard-card-leetcode {
+    grid-column: span 8;
+  }
+  .dashboard-card-codeforces {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid-top {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-card-profile,
+  .dashboard-card-leetcode,
+  .dashboard-card-codeforces {
+    grid-column: span 12;
+  }
+  .dashboard-grid-settings {
+    grid-template-columns: 1fr;
+  }
 }

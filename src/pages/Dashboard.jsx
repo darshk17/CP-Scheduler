@@ -222,181 +222,246 @@ export default function Dashboard() {
 
   return (
     <main className="container" style={{ padding: '40px 24px', minHeight: 'calc(100vh - 128px)' }}>
-      <div className="section-label" style={{ marginBottom: '32px', fontSize: '1.4rem', textAlign: 'center', fontWeight: 600 }}>📊 User Dashboard</div>
+      
+      {/* SaaS Welcome Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+          Welcome back, {userData.fullName.split(' ')[0]} 👋
+        </h1>
+        <p style={{ color: 'var(--text-secondary)', margin: '6px 0 0 0', fontSize: '0.92rem' }}>
+          Here is an overview of your competitive programming statistics and schedule alerts.
+        </p>
+      </div>
 
-      {/* Grid Layout containing four independent dashboard cards */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '24px',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}>
-
-        {/* Card 1: User Profile */}
-        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '8px', margin: 0 }}>
-            👤 User Profile
+      {/* Row 1: Top Dashboard Cards (Profile, LeetCode, Codeforces) */}
+      <div className="dashboard-grid-top">
+        
+        {/* Card 1: User Profile Summary (Compact) */}
+        <div className="add-event-form dashboard-card-profile" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '1.05rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '10px', margin: 0, fontWeight: 700 }}>
+            👤 Profile Summary
           </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Name:</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '0.85rem' }}>
+            <div>
+              <span style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Full Name</span>
               <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{userData.fullName}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Email:</span>
+            <div>
+              <span style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Email Address</span>
               <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{userData.email}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Role:</span>
+            <div>
+              <span style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Account Role</span>
               <span style={{ color: 'var(--text-primary)', textTransform: 'capitalize', fontWeight: 600 }}>{userData.role}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Connected Platforms:</span>
-              <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{connectedPlatformsCount} connected</span>
+            <div>
+              <span style={{ color: 'var(--text-muted)', display: 'block', marginBottom: '2px' }}>Integrations</span>
+              <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{connectedPlatformsCount} Platform{connectedPlatformsCount !== 1 ? 's' : ''} Linked</span>
             </div>
           </div>
         </div>
 
-        {/* Card 2: Competitive Programming Statistics */}
-        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '8px', margin: 0 }}>
-            🏆 CP Profiles & Stats
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '0.9rem', flexGrow: 1 }}>
+        {/* Card 2: LeetCode Statistics (Largest Card) */}
+        <div className="add-event-form dashboard-card-leetcode" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
+            <h3 style={{ fontSize: '1.05rem', color: 'var(--lc)', margin: 0, fontWeight: 700 }}>
+              ⚡ LeetCode Profile
+            </h3>
+            {userData.cpStats?.leetcode?.username && (
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                @{userData.cpStats.leetcode.username}
+              </span>
+            )}
+          </div>
 
-            {/* Codeforces Segment */}
-            <div>
-              <div style={{ color: 'var(--text-primary)', fontWeight: 700, marginBottom: '6px', fontSize: '0.88rem' }}>Codeforces</div>
-              {!userData.cpStats?.codeforces?.handle ? (
-                <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontStyle: 'italic', paddingLeft: '8px' }}>
-                  No Codeforces profile synced.
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingLeft: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Handle:</span>
-                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{userData.cpStats.codeforces.handle}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Rating:</span>
-                    <span style={{ color: 'var(--accent-bright)', fontWeight: 700 }}>{userData.cpStats.codeforces.rating} (max {userData.cpStats.codeforces.maxRating})</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Rank:</span>
-                    <span style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{userData.cpStats.codeforces.rank}</span>
-                  </div>
-                </div>
-              )}
+          {!userData.cpStats?.leetcode?.username ? (
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontStyle: 'italic', padding: '16px 0', textAlign: 'center' }}>
+              Connect your LeetCode account to view statistics.
             </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flexGrow: 1 }}>
+              
+              {/* Primary Highlight */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent-bright)', lineHeight: 1 }}>
+                  {userData.cpStats.leetcode.totalSolved}
+                </span>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                  Problems Solved
+                </span>
+              </div>
 
-            {/* LeetCode Segment */}
-            <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '10px' }}>
-              <div style={{ color: 'var(--text-primary)', fontWeight: 700, marginBottom: '6px', fontSize: '0.88rem' }}>LeetCode</div>
-              {!userData.cpStats?.leetcode?.username ? (
-                <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontStyle: 'italic', paddingLeft: '8px' }}>
-                  No LeetCode profile synced.
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingLeft: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Username:</span>
-                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{userData.cpStats.leetcode.username}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Total Solved:</span>
-                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
-                      <span style={{ color: 'var(--accent-bright)', fontWeight: 700 }}>{userData.cpStats.leetcode.totalSolved}</span> (E: {userData.cpStats.leetcode.easySolved} | M: {userData.cpStats.leetcode.mediumSolved} | H: {userData.cpStats.leetcode.hardSolved})
+              {/* Badges/Chips */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ background: 'rgba(62, 207, 142, 0.12)', color: 'var(--green)', padding: '4px 10px', borderRadius: '16px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  Easy: {userData.cpStats.leetcode.easySolved}
+                </span>
+                <span style={{ background: 'rgba(245, 197, 66, 0.12)', color: 'var(--yellow)', padding: '4px 10px', borderRadius: '16px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  Medium: {userData.cpStats.leetcode.mediumSolved}
+                </span>
+                <span style={{ background: 'rgba(246, 104, 94, 0.12)', color: 'var(--red)', padding: '4px 10px', borderRadius: '16px', fontSize: '0.75rem', fontWeight: 600 }}>
+                  Hard: {userData.cpStats.leetcode.hardSolved}
+                </span>
+              </div>
+
+              {/* Global Rank */}
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', borderTop: '1px solid var(--border-light)', paddingTop: '12px' }}>
+                Global Rank: <strong style={{ color: 'var(--text-primary)' }}>#{userData.cpStats.leetcode.ranking.toLocaleString()}</strong>
+              </div>
+
+              {/* Sync controls */}
+              <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Updated: {lastSyncDate}</span>
+                <button
+                  onClick={handleRefreshStats}
+                  disabled={refreshing}
+                  style={{
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-primary)',
+                    padding: '6px 12px',
+                    borderRadius: 'var(--radius-sm)',
+                    fontFamily: 'inherit',
+                    fontWeight: 600,
+                    fontSize: '0.78rem',
+                    cursor: 'pointer',
+                    transition: 'all var(--transition)'
+                  }}
+                >
+                  {refreshing ? 'Syncing...' : 'Sync'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Card 3: Codeforces Statistics */}
+        <div className="add-event-form dashboard-card-codeforces" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
+            <h3 style={{ fontSize: '1.05rem', color: 'var(--cf)', margin: 0, fontWeight: 700 }}>
+              🔴 Codeforces Profile
+            </h3>
+            {userData.cpStats?.codeforces?.handle && (
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                @{userData.cpStats.codeforces.handle}
+              </span>
+            )}
+          </div>
+
+          {!userData.cpStats?.codeforces?.handle ? (
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontStyle: 'italic', padding: '16px 0', textAlign: 'center' }}>
+              Connect your Codeforces account to view statistics.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flexGrow: 1 }}>
+              
+              {/* Primary Highlight */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent-bright)', lineHeight: 1 }}>
+                  {userData.cpStats.codeforces.rating}
+                </span>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                  Rating
+                </span>
+              </div>
+
+              {/* Chips */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-primary)', padding: '4px 10px', borderRadius: '16px', fontSize: '0.72rem', fontWeight: 600, textTransform: 'capitalize' }}>
+                  {userData.cpStats.codeforces.rank}
+                </span>
+                <span style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-secondary)', padding: '4px 10px', borderRadius: '16px', fontSize: '0.72rem', fontWeight: 600 }}>
+                  Max: {userData.cpStats.codeforces.maxRating}
+                </span>
+              </div>
+
+              {/* Rank visual bar placeholder or subtle label */}
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', borderTop: '1px solid var(--border-light)', paddingTop: '12px' }}>
+                Rank Status: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{userData.cpStats.codeforces.rank}</strong>
+              </div>
+
+              {/* Sync controls */}
+              <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Updated: {lastSyncDate}</span>
+                <button
+                  onClick={handleRefreshStats}
+                  disabled={refreshing}
+                  style={{
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-primary)',
+                    padding: '6px 12px',
+                    borderRadius: 'var(--radius-sm)',
+                    fontFamily: 'inherit',
+                    fontWeight: 600,
+                    fontSize: '0.78rem',
+                    cursor: 'pointer',
+                    transition: 'all var(--transition)'
+                  }}
+                >
+                  {refreshing ? 'Syncing...' : 'Sync'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+      </div>
+
+      {/* Row 2: Saved Contests (Full Width Section) */}
+      <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '24px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', margin: 0, fontWeight: 700 }}>
+            📌 Bookmarked Contests
+          </h3>
+          <span style={{ background: 'var(--accent-glow)', color: 'var(--accent-bright)', padding: '4px 12px', borderRadius: '16px', fontSize: '0.78rem', fontWeight: 600 }}>
+            {userData.savedContests?.length || 0} Saved
+          </span>
+        </div>
+
+        {!userData.savedContests || userData.savedContests.length === 0 ? (
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.88rem', fontStyle: 'italic', textAlign: 'center', padding: '24px 0' }}>
+            No saved contests yet. Bookmark contests on the home page to track them here.
+          </div>
+        ) : (() => {
+          const sortedList = [...userData.savedContests].sort(
+            (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
+          );
+
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+              {sortedList.map((item) => (
+                <div key={item._id || item.contestId} style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'var(--bg)', padding: '16px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>{item.contestId}</span>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                      {new Date(item.savedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Global Rank:</span>
-                    <span style={{ color: 'var(--text-primary)' }}>{userData.cpStats.leetcode.ranking.toLocaleString()}</span>
-                  </div>
                 </div>
-              )}
+              ))}
             </div>
+          );
+        })()}
+      </div>
 
-
-
-            {/* Sync Status and Button */}
-            <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '12px', marginTop: 'auto' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '8px', color: 'var(--text-muted)' }}>
-                <span>Last Sync:</span>
-                <span>{lastSyncDate}</span>
-              </div>
-              <button
-                onClick={handleRefreshStats}
-                disabled={refreshing || (!userData.codeforcesUsername && !userData.leetcodeUsername)}
-                className="add-event-button"
-                style={{ width: '100%', alignSelf: 'stretch' }}
-              >
-                <span>{refreshing ? 'Refreshing...' : '🔄 Refresh Statistics'}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Saved Contests */}
-        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '8px', margin: 0 }}>
-            📌 Saved Contests
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Total Bookmarked:</span>
-              <span style={{ color: 'var(--accent-bright)', fontWeight: 700 }}>{userData.savedContests?.length || 0}</span>
-            </div>
-
-            <div style={{ marginTop: '4px' }}>
-              {!userData.savedContests || userData.savedContests.length === 0 ? (
-                <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontStyle: 'italic', textAlign: 'center', padding: '16px 0' }}>
-                  No saved contests yet.
-                </div>
-              ) : (() => {
-                const sortedList = [...userData.savedContests].sort(
-                  (a, b) => new Date(b.savedAt) - new Date(a.savedAt)
-                );
-                const latestThree = sortedList.slice(0, 3);
-                const moreCount = sortedList.length - 3;
-
-                return (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 600, marginBottom: '2px' }}>Recent Bookmarks:</div>
-                    {latestThree.map((item) => (
-                      <div key={item._id || item.contestId} style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--bg)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', border: '1px solid var(--border)' }}>
-                        <span style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{item.contestId}</span>
-                        <span style={{ color: 'var(--text-muted)' }}>
-                          {new Date(item.savedAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
-                        </span>
-                      </div>
-                    ))}
-                    {moreCount > 0 && (
-                      <div style={{ color: 'var(--accent-bright)', fontSize: '0.82rem', fontWeight: 600, paddingLeft: '8px', marginTop: '2px' }}>
-                        +{moreCount} more
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        </div>
-
+      {/* Row 3: Settings Grid */}
+      <div className="dashboard-grid-settings">
+        
         {/* Card 4: Reminder Settings */}
-        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '8px', margin: 0 }}>
+        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '10px', margin: 0, fontWeight: 700 }}>
             🔔 Reminder Settings
           </h3>
-          <form onSubmit={handleSaveSettings} style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '0.9rem', flexGrow: 1 }}>
+          <form onSubmit={handleSaveSettings} style={{ display: 'flex', flexDirection: 'column', gap: '20px', fontSize: '0.9rem', flexGrow: 1 }}>
             {settingsSuccess && (
-              <div style={{ color: 'var(--green)', background: 'rgba(62, 207, 142, 0.1)', border: '1px solid var(--green)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem' }}>
+              <div style={{ color: 'var(--green)', background: 'rgba(62, 207, 142, 0.1)', border: '1px solid var(--green)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem' }}>
                 ✅ {settingsSuccess}
               </div>
             )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Email Alerts:</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Email Alerts:</span>
               <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                 <input
                   type="checkbox"
@@ -414,7 +479,7 @@ export default function Dashboard() {
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Trigger Time:</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Trigger Time:</span>
               <select
                 value={minutesBefore}
                 onChange={(e) => {
@@ -426,18 +491,18 @@ export default function Dashboard() {
                   color: 'var(--text-primary)',
                   border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '4px 8px',
+                  padding: '6px 12px',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem',
                   outline: 'none',
                   cursor: 'pointer'
                 }}
               >
-                <option value={10}>10 minutes</option>
-                <option value={15}>15 minutes</option>
-                <option value={30}>30 minutes</option>
-                <option value={45}>45 minutes</option>
-                <option value={60}>60 minutes</option>
+                <option value={10}>10 minutes before</option>
+                <option value={15}>15 minutes before</option>
+                <option value={30}>30 minutes before</option>
+                <option value={45}>45 minutes before</option>
+                <option value={60}>60 minutes before</option>
               </select>
             </div>
 
@@ -445,26 +510,27 @@ export default function Dashboard() {
               type="submit"
               disabled={savingSettings}
               className="add-event-button"
-              style={{ width: '100%', marginTop: 'auto', alignSelf: 'stretch' }}
+              style={{ width: '100%', padding: '10px 16px', fontWeight: 600, fontSize: '0.85rem', marginTop: 'auto' }}
             >
               <span>{savingSettings ? 'Saving...' : 'Save Settings'}</span>
             </button>
           </form>
         </div>
+
         {/* Card 5: Profile Settings */}
-        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '8px', margin: 0 }}>
+        <div className="add-event-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '1.15rem', color: 'var(--accent-bright)', borderBottom: '1px solid var(--border)', paddingBottom: '10px', margin: 0, fontWeight: 700 }}>
             👤 Profile Settings
           </h3>
           <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '0.9rem', flexGrow: 1 }}>
             {profileSuccess && (
-              <div style={{ color: 'var(--green)', background: 'rgba(62, 207, 142, 0.1)', border: '1px solid var(--green)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem' }}>
+              <div style={{ color: 'var(--green)', background: 'rgba(62, 207, 142, 0.1)', border: '1px solid var(--green)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem' }}>
                 ✅ {profileSuccess}
               </div>
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label htmlFor="profileName" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Full Name *</label>
+              <label htmlFor="profileName" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontWeight: 500 }}>Full Name *</label>
               <input
                 type="text"
                 id="profileName"
@@ -478,7 +544,7 @@ export default function Dashboard() {
                   color: 'var(--text-primary)',
                   border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '6px 10px',
+                  padding: '8px 12px',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem',
                   outline: 'none'
@@ -488,7 +554,7 @@ export default function Dashboard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label htmlFor="profileEmail" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Email Address</label>
+              <label htmlFor="profileEmail" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontWeight: 500 }}>Email Address</label>
               <input
                 type="email"
                 id="profileEmail"
@@ -499,7 +565,7 @@ export default function Dashboard() {
                   color: 'var(--text-muted)',
                   border: '1px solid var(--border-light)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '6px 10px',
+                  padding: '8px 12px',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem',
                   cursor: 'not-allowed',
@@ -509,7 +575,7 @@ export default function Dashboard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label htmlFor="profileCf" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Codeforces Username</label>
+              <label htmlFor="profileCf" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontWeight: 500 }}>Codeforces Username</label>
               <input
                 type="text"
                 id="profileCf"
@@ -524,7 +590,7 @@ export default function Dashboard() {
                   color: 'var(--text-primary)',
                   border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '6px 10px',
+                  padding: '8px 12px',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem',
                   outline: 'none'
@@ -533,7 +599,7 @@ export default function Dashboard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label htmlFor="profileLc" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>LeetCode Username</label>
+              <label htmlFor="profileLc" style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontWeight: 500 }}>LeetCode Username</label>
               <input
                 type="text"
                 id="profileLc"
@@ -548,7 +614,7 @@ export default function Dashboard() {
                   color: 'var(--text-primary)',
                   border: '1px solid var(--border)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '6px 10px',
+                  padding: '8px 12px',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem',
                   outline: 'none'
@@ -560,7 +626,7 @@ export default function Dashboard() {
               type="submit"
               disabled={savingProfile}
               className="add-event-button"
-              style={{ width: '100%', marginTop: 'auto', alignSelf: 'stretch' }}
+              style={{ width: '100%', padding: '10px 16px', fontWeight: 600, fontSize: '0.85rem', marginTop: 'auto' }}
             >
               <span>{savingProfile ? 'Saving...' : 'Save Changes'}</span>
             </button>
