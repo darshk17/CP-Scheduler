@@ -4,13 +4,13 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 const AuthContext = createContext();
 
 // Define API base URL
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [loading, setLoading] = useState(true);
-  
+
   // New state to manage the user's bookmarked saved contests list
   const [savedContests, setSavedContests] = useState([]);
 
@@ -196,17 +196,17 @@ export const AuthProvider = ({ children }) => {
 
   // Provide state values and control functions globally
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      token, 
-      loading, 
-      savedContests, 
-      login, 
-      logout, 
-      registerUser, 
-      saveContest, 
-      removeSavedContest, 
-      getSavedContests 
+    <AuthContext.Provider value={{
+      user,
+      token,
+      loading,
+      savedContests,
+      login,
+      logout,
+      registerUser,
+      saveContest,
+      removeSavedContest,
+      getSavedContests
     }}>
       {children}
     </AuthContext.Provider>
